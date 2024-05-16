@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es"></html>
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="Assets/Login.css">
+    <link rel="stylesheet" href="{% static 'Assets/Login.css' %}">
 </head>
 
 <body>
@@ -15,6 +16,7 @@
 
         <div class="login-box">
             <form method="post">
+                {% csrf_token %}
                 <input type="text" id="input-login" name="email"  placeholder="Usuario"  required>
             <br>
                 <input type="password" id="input-login" name="password"  placeholder="Contraseña"  required>
@@ -22,7 +24,7 @@
                 <input type="submit" id="input-button" value="Ingresar" onclick="window.location.href='User_admin_listausuarios.html'">
             </form>
             <hr class="hr_separator"> 
-            <h4><a href="Registro.html" style="color: #116A7B;">¿No tienes cuenta? Registrate</a></h4>
+            <h4><a href="{%url 'registro'%}" style="color: #116A7B;">¿No tienes cuenta? Registrate</a></h4>
         </div>
     </div>
 

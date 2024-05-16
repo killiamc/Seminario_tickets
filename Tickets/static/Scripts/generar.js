@@ -1,7 +1,5 @@
 
-var name = document.getElementById("name"),
-    email = document.getElementById("email"),
-    id = document.getElementById("id"),
+var email = document.getElementById("email"),
     movil = document.getElementById("movil"),
     btnEPS = document.getElementById('epsbtn'),
     btnBanco = document.getElementById('bancobtn'),
@@ -70,33 +68,39 @@ agendarbtn.addEventListener('click', (e) => {
             turno = turno + 'col';
         }
     }
-    if (id.value > 0 && movil.value > 0 && datet.value) {
+    if (movil.value > 0 && datet.value) {
         numeroTurno = formatearNumeroTurno(contadorTurno);
         let fe = datet.value;
         let dia = fe.split('-')[2]; 
-        turno = turno +dia +numeroTurno;
+        turno = turno + dia + numeroTurno;
         this.contadorTurno++;
         console.log(datet.value)
         console.log('Turno:', turno);
         console.log('Lugar seleccionado:', lugarSeleccionado);
         document.getElementById('turno').textContent = 'Turno: ' + turno;
+
+        $.ajax({
+            type: "POST",
+            url: '/get_data/',
+            data: {
+            "fecha": datet.value,
+            "turno": turno,
+            "entidad": lugarSeleccionado,
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+            // any process in data
+            alert("Turno agendado con exito")
+            },
+            failure: function () {
+            alert("failure");
+            }
+        });
+
+
     } else {
         alert("No pueden estar los campos vacios");
     }
 });
 
 
-
-
-function agregarFilaTabla(turno, nombre, correo, identificacion, movil, fecha, tipo) {
-    var tabla = document.getElementById('tablaTurnos').getElementsByTagName('tbody')[0];
-    var nuevaFila = tabla.insertRow(tabla.rows.length);
-
-    nuevaFila.insertCell(0).textContent = turno;
-    nuevaFila.insertCell(1).textContent = nombre;
-    nuevaFila.insertCell(2).textContent = correo;
-    nuevaFila.insertCell(3).textContent = identificacion;
-    nuevaFila.insertCell(4).textContent = movil;
-    nuevaFila.insertCell(5).textContent = fecha;
-    nuevaFila.insertCell(6).textContent = tipo;
-}
