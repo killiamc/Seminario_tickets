@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
-from projects.models import Turno
+from projects.models import Turno, NewUser
 #from projects.models import 
 from django.http import JsonResponse
 from django.contrib import messages
@@ -104,3 +104,18 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión')
     return redirect('login')
+
+def Modificar(request):
+    datos = NewUser.objects.filter(cedula=request.user.cedula).values('first_name', 'last_name', 'email', 'telefono')
+    datos = pd.DataFrame(list(datos))
+    context = {'datos': datos}
+
+    if request.method == 'POST':
+        name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        telefono = request.POST.get('telefono')
+        print(name, last_name, email, telefono)
+        NewUser.objects.filter(cedula=request.user.cedula).update(first_name=name, last_name=last_name, email=email, telefono=telefono)
+        
+    return render(request, 'Modificar.html', context = context)

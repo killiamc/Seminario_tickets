@@ -48,8 +48,8 @@
             </ul>
             <div class="opt" style=" position: absolute;bottom: 10px; left: 20px;">
                 <hr>
-                <a href="#" class="nav-link text-white">
-                    <button href="{%url 'modificar'%}" class="btn btn-primary" style="background-color:#116A7B ; width: 240px; padding: auto; font-size: 25px;">
+                <a href="{%url 'modificar'%}" class="nav-link text-white">
+                    <button class="btn btn-primary" style="background-color:#116A7B ; width: 240px; padding: auto; font-size: 25px;">
                         <i class="bi bi-gear-fill"></i>
                         Opciones
                     </button>
@@ -59,7 +59,25 @@
             </div>
         <div class="Ticket" >
             <h2 class="text-center mt-4 mb-5" >Ver Ticket</h2>
-            {{ table|safe }}
+            
+            <form method="post" action = "{% url 'modificar' %}">
+                {% csrf_token %}
+                {% for field, values in datos.items %}
+                <div class="form-group">
+                  <label for="{{field}}">{{field}}</label>
+                <input type="{{field.dtypes}}" class="form-control" name="{{field}}" aria-describedby="emailHelp" placeholder="{{ values.0 }}" value="{{ values.0 }}">
+                
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary">Guardar</button>
+
+            </form>
+            <br>
+            <button class="btn btn-danger" onclick="window.location.href='{% url 'index' %}'">Cancel</button>
+
+
         </div>
     </div>
     <script src="{% static 'Scripts/generar.js' %}"></script>
